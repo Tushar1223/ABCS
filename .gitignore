@@ -1,0 +1,37 @@
+# Node modules (backend and frontend)
+node_modules/
+*/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+*/.env
+
+# Build output
+dist/
+build/
+*/dist/
+*/build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Cache and temp
+*.cache
+*.swp
+*.tmp
+*.pid
+
+# Output from npm/yarn
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
