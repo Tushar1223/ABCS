@@ -6,18 +6,9 @@ const ParticipantsTab = () => {
 
   useEffect(() => {
     socket.emit('get-students');
-
-    socket.on('student-list', (data) => {
-      setStudents(data);
-    });
-
-    socket.on('student-joined', (student) => {
-      setStudents((prev) => [...prev, student]);
-    });
-
-    socket.on('student-kicked', (tabId) => {
-      setStudents((prev) => prev.filter((s) => s.tabId !== tabId));
-    });
+    socket.on('student-list', setStudents);
+    socket.on('student-joined', (s) => setStudents((prev) => [...prev, s]));
+    socket.on('student-kicked', (id) => setStudents((prev) => prev.filter((s) => s.tabId !== id)));
 
     return () => {
       socket.off('student-list');
@@ -26,33 +17,36 @@ const ParticipantsTab = () => {
     };
   }, []);
 
-  const kickStudent = (tabId) => {
-    socket.emit('kick-student', tabId);
-  };
+  const kickStudent = (tabId) => socket.emit('kick-student', tabId);
 
   return (
-    <div className="max-w-2xl mx-auto mt-4">
-      <h2 className="text-lg font-bold mb-4 text-darkText">Participants</h2>
-
+    <div className="p-4 text-sm">
       {students.length === 0 ? (
-        <p className="text-sm text-grayText">No students connected.</p>
+        <p className="text-sm text-gray-500">No students connected.</p>
       ) : (
-        <ul className="space-y-2">
-          {students.map((student) => (
-            <li
-              key={student.tabId}
-              className="flex justify-between items-center border p-3 rounded"
-            >
-              <span className="text-darkText">{student.name}</span>
-              <button
-                onClick={() => kickStudent(student.tabId)}
-                className="text-sm text-red-600 border border-red-300 px-3 py-1 rounded hover:bg-red-50"
-              >
-                Kick
-              </button>
-            </li>
-          ))}
-        </ul>
+        <table className="w-full">
+          <thead>
+            <tr className="text-gray-500 text-xs border-b">
+              <th className="text-left py-2">Name</th>
+              <th className="text-left py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((s) => (
+              <tr key={s.tabId} className="border-b last:border-0">
+                <td className="py-2 font-semibold text-black">{s.name}</td>
+                <td className="py-2">
+                  <button
+                    onClick={() => kickStudent(s.tabId)}
+                    className="text-primary hover:underline"
+                  >
+                    Kick out
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );

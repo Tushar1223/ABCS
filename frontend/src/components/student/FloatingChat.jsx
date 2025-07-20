@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import ChatTab from '../teacher/ChatTab';
+import ParticipantsTabStudent from './ParticipantsTabStudent';
 import { BsChatDots } from 'react-icons/bs';
 
 const FloatingChat = ({ pollId, sender, allowChatWithoutPoll = false }) => {
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat');
 
   const isDisabled = !allowChatWithoutPoll && (!pollId || !sender);
 
@@ -27,7 +29,34 @@ const FloatingChat = ({ pollId, sender, allowChatWithoutPoll = false }) => {
 
       {open && (
         <div className="fixed bottom-20 right-4 z-50 w-80 bg-white border rounded-lg shadow-lg">
-          <ChatTab pollId={pollId} sender={sender} />
+          <div className="flex border-b">
+            <button
+              className={`w-1/2 py-2 text-sm font-medium ${
+                activeTab === 'chat'
+                  ? 'border-b-2 border-purple-600 text-purple-600'
+                  : 'text-gray-500'
+              }`}
+              onClick={() => setActiveTab('chat')}
+            >
+              Chat
+            </button>
+            <button
+              className={`w-1/2 py-2 text-sm font-medium ${
+                activeTab === 'participants'
+                  ? 'border-b-2 border-purple-600 text-purple-600'
+                  : 'text-gray-500'
+              }`}
+              onClick={() => setActiveTab('participants')}
+            >
+              Participants
+            </button>
+          </div>
+
+          {activeTab === 'chat' ? (
+            <ChatTab pollId={pollId} sender={sender} />
+          ) : (
+            <ParticipantsTabStudent />
+          )}
         </div>
       )}
     </>

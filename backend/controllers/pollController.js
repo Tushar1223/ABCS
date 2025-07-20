@@ -35,8 +35,27 @@ export const endPoll = async (req, res) => {
 export const getAllPolls = async (req, res) => {
   try {
     const polls = await Poll.find({}).sort({ createdAt: -1 });
-    res.json(polls);
+    const enrichedPolls = await Promise.all(polls.map(async (poll) => {
+      const responses = await Response.find({ pollId: poll._id });
+      const resultCount = {};
+
+      poll.options.forEach(opt => resultCount[opt] = 0);
+
+      responses.forEach(r => {
+        if (resultCount[r.selectedOption] !== undefined) {
+          resultCount[r.selectedOption]++;
+        }
+      });
+
+      return {
+        ...poll._doc,
+        result: resultCount
+      };
+    }));
+
+    res.json(enrichedPolls);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch past polls' });
   }
 };
+

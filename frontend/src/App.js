@@ -8,7 +8,7 @@ import StudentWaiting from './pages/StudentWaiting';
 import StudentQuestion from './pages/StudentQuestion';
 import StudentResults from './pages/StudentResults';
 import KickedPage from './pages/KickedPage';
-
+import PollHistory from './components/teacher/PollHistory';
 function App() {
   const [poll, setPoll] = useState(null);
 
@@ -22,6 +22,7 @@ function App() {
         <Route path="/student-question" element={<StudentQuestion poll={poll} />} />
         <Route path="/student-results" element={<StudentResults poll={poll} />} />
         <Route path="/kicked" element={<KickedPage />} />
+        <Route path="/poll-history" element={<PollHistory />} />
       </Routes>
     </Router>
   );

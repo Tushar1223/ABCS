@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import socket from '../../socket';
 
-const LivePoll = ({ poll, questionNumber = 1, onAskNewQuestion }) => {
+const LivePoll = ({ poll, onAskNew }) => {
   const [results, setResults] = useState({});
 
   useEffect(() => {
@@ -14,55 +14,48 @@ const LivePoll = ({ poll, questionNumber = 1, onAskNewQuestion }) => {
     };
   }, []);
 
-  const totalVotes = Object.values(results).reduce((acc, val) => acc + val, 0);
-
-  const getPercentage = (option) => {
-    const votes = results[option] || 0;
-    return totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
-  };
+  const totalVotes = Object.values(results).reduce((sum, val) => sum + val, 0);
 
   return (
-    <div className="min-h-screen bg-white px-6 py-10 flex flex-col items-center">
-      <div className="w-full max-w-xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 relative">
-        <h3 className="text-sm text-primary font-semibold mb-1">Question {questionNumber}</h3>
-        <h2 className="text-lg font-bold text-darkText mb-6">{poll.question}</h2>
+    <div className="w-full max-w-xl mx-auto mt-10 p-4">
+      <h2 className="text-lg font-semibold text-darkText mb-2">Question</h2>
 
-        <div className="space-y-3">
-          {poll.options.map((option, index) => {
-  const percentage = getPercentage(option);
-  return (
-<div className="relative bg-gray-100 rounded-lg overflow-hidden h-10 mb-3">
-  {percentage > 0 && (
-    <div
-      className="absolute top-0 left-0 h-full bg-[#7F56D9] rounded-l-lg transition-all duration-500 ease-in-out"
-      style={{ width: `${percentage}%`, zIndex: 0 }}
-    ></div>
-  )}
-  
-  <div className="relative z-10 flex items-center h-full px-4">
-    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-300 text-xs font-bold text-[#7F56D9] mr-3">
-      {index + 1}
-    </div>
-    <span className="text-sm font-medium text-darkText">{option}</span>
-    <span className="ml-auto text-sm font-semibold text-darkText">{percentage}%</span>
-  </div>
-</div>
+      <div className="bg-gradient-to-r from-gray-700 to-gray-500 text-white rounded-t-md px-4 py-2 font-semibold">
+        {poll.question}
+      </div>
 
-  );
-})}
-        </div>
+      <div className="border border-purple-200 rounded-b-md px-4 py-4 space-y-4">
+        {poll.options.map((option, idx) => {
+          const voteCount = results[option] || 0;
+          const percentage = totalVotes ? Math.round((voteCount / totalVotes) * 100) : 0;
 
-        <div className="mt-6 flex justify-between items-center">
-          <p className="text-sm text-gray-500">Wait for the teacher to ask a new question...</p>
-          {onAskNewQuestion && (
-            <button
-              className="bg-[#7F56D9] hover:bg-[#6942C2] text-white px-6 py-2 rounded-full font-semibold text-sm shadow"
-              onClick={onAskNewQuestion}
-            >
-              + Ask a new question
-            </button>
-          )}
-        </div>
+          return (
+            <div key={idx} className="relative bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div
+                className="absolute left-0 top-0 h-full bg-primary opacity-90 transition-all duration-500"
+                style={{ width: `${percentage}%` }}
+              />
+              <div className="relative flex items-center justify-between px-4 py-2 z-10">
+                <div className="flex items-center gap-2">
+                  <div className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">
+                    {idx + 1}
+                  </div>
+                  <span className="text-darkText font-medium">{option}</span>
+                </div>
+                <span className="text-darkText font-medium">{percentage}%</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="text-center mt-6">
+        <button
+          onClick={onAskNew}
+          className="bg-primary text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-secondary"
+        >
+          + Ask a new question
+        </button>
       </div>
     </div>
   );
