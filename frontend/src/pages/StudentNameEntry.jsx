@@ -22,30 +22,39 @@ const StudentNameEntry = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-center px-4">
-      <span className="text-sm bg-primary text-white px-3 py-1 rounded-full mb-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 text-center">
+      <span className="text-sm bg-[#6B4EFF] text-white px-4 py-1 rounded-full mb-6 font-medium shadow-md">
         ✦ Intervue Poll
       </span>
 
-      <h1 className="text-2xl sm:text-3xl font-semibold text-darkText mb-2">
-        Let’s <span className="text-black font-bold">Get Started</span>
+      <h1 className="text-3xl sm:text-4xl font-medium text-black mb-4">
+        Let’s <span className="font-extrabold">Get Started</span>
       </h1>
 
-      <p className="text-grayText mb-6 text-sm sm:text-base max-w-md">
-        If you’re a student, you’ll be able to <strong>submit your answers</strong>,
-        participate in live polls, and see how your responses compare with your classmates.
+      <p className="text-[#6B6F76] text-sm sm:text-base max-w-md mb-8">
+        If you’re a student, you’ll be able to <strong>submit your answers</strong>, participate in live polls, and see how your responses compare with your classmates
       </p>
 
-      <input
-        type="text"
-        placeholder="Enter your Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-64 border border-gray-300 px-4 py-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-primary"
-      />
+      <div className="text-left w-full max-w-md mb-2">
+        <label htmlFor="name" className="text-sm font-medium text-black mb-1 block">
+          Enter your Name
+        </label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Enter your Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full bg-[#F5F5F5] text-black px-4 py-3 rounded-md border border-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#6B4EFF]"
+        />
+      </div>
 
       <button
-        className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full transition-all"
+        className={`w-full max-w-md py-3 mt-4 rounded-full text-white font-medium text-base transition-all ${
+          name.trim()
+            ? 'bg-gradient-to-r from-[#6B4EFF] to-[#8F5CFF] hover:opacity-90'
+            : 'bg-gradient-to-r from-[#ccc] to-[#ddd] cursor-not-allowed'
+        }`}
         onClick={handleContinue}
         disabled={!name.trim()}
       >
