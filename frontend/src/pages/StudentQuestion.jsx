@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
+import FloatingChat from '../components/student/FloatingChat';
 
-const socket = io('http://localhost:5000'); // Adjust for production
+const socket = io('http://localhost:5000');
 
 const StudentQuestion = ({ poll }) => {
   const navigate = useNavigate();
@@ -33,13 +34,13 @@ const StudentQuestion = ({ poll }) => {
     socket.emit('submit-answer', {
       pollId: poll._id,
       studentName,
-      selectedOption
+      selectedOption,
     });
     navigate('/student-results');
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 relative">
       <h2 className="text-xl font-bold text-darkText mb-2 text-center">{poll.question}</h2>
       <p className="text-grayText mb-6 text-sm">You have {timer} seconds left to answer</p>
 
@@ -49,7 +50,9 @@ const StudentQuestion = ({ poll }) => {
             key={index}
             onClick={() => setSelectedOption(option)}
             className={`w-full cursor-pointer p-4 rounded border ${
-              selectedOption === option ? 'border-primary bg-lightPurple text-white' : 'border-gray-300'
+              selectedOption === option
+                ? 'border-primary bg-lightPurple text-white'
+                : 'border-gray-300'
             }`}
           >
             {option}
@@ -64,6 +67,12 @@ const StudentQuestion = ({ poll }) => {
       >
         Submit Answer
       </button>
+
+      {/* Floating Chat Button */}
+      <FloatingChat
+        pollId={poll._id}
+        sender={sessionStorage.getItem('studentName')}
+      />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:5000'); // place outside component if not SSR
 
-const CreatePollModal = ({ onClose }) => {
+const CreatePollModal = ({ onClose, onCreate }) => {
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState(['', '']);
   const [duration, setDuration] = useState(60);
@@ -22,24 +22,25 @@ const CreatePollModal = ({ onClose }) => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post('http://localhost:5000/api/polls', {
-        question,
-        options: options.filter(opt => opt.trim() !== ''),
-        duration
-      });
+  setLoading(true);
+  try {
+    const response = await axios.post('http://localhost:5000/api/polls', {
+      question,
+      options: options.filter(opt => opt.trim() !== ''),
+      duration
+    });
 
-      const createdPoll = response.data;
+    const createdPoll = response.data;
 
-      socket.emit('poll-started', createdPoll); // 🔥 send to all clients
-      onClose();
-    } catch (err) {
-      console.error('❌ Failed to create poll', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    socket.emit('poll-started', createdPoll); // send to all
+    onCreate(createdPoll); // ✅ this was missing!
+    onClose();
+  } catch (err) {
+    console.error('❌ Failed to create poll', err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return createPortal(
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">

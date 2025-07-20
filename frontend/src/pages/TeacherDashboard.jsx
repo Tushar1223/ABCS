@@ -79,7 +79,8 @@ const TeacherDashboard = () => {
           </p>
         )}
 
-        {activeTab === "chat" && poll && <ChatTab pollId={poll._id} />}
+       {activeTab === "chat" && poll && <ChatTab pollId={poll._id} sender="teacher" />}
+
         {activeTab === "chat" && !poll && (
           <p className="text-grayText text-sm text-center">
             Start a poll to enable chat.

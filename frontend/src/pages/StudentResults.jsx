@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
+import FloatingChat from '../components/student/FloatingChat';
 
 const socket = io('http://localhost:5000');
 
@@ -38,7 +39,7 @@ const StudentResults = ({ poll }) => {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 relative">
       <h2 className="text-xl font-bold text-darkText mb-4 text-center">{poll.question}</h2>
       <p className="text-grayText text-sm mb-6">Here’s how everyone answered:</p>
 
@@ -53,6 +54,12 @@ const StudentResults = ({ poll }) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {/* Floating Chat Button */}
+      <FloatingChat
+        pollId={poll._id}
+        sender={sessionStorage.getItem('studentName')}
+      />
     </div>
   );
 };
