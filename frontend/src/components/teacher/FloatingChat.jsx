@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ParticipantsTab from './ParticipantsTab';
 import { FaComments } from 'react-icons/fa';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000'); // Replace with your backend if needed
+import socket from '../../socket'; // Replace with your backend if needed
 
 const FloatingChat = ({ pollId, sender = 'teacher' }) => {
   const [isOpen, setIsOpen] = useState(false);

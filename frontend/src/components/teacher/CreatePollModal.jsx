@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000'); // place outside component if not SSR
+import socket from '../../socket'; // place outside component if not SSR
 
 const CreatePollModal = ({ onClose, onCreate }) => {
   const [question, setQuestion] = useState('');

@@ -3,9 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip,
   CartesianGrid, ResponsiveContainer
 } from 'recharts';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000');
+import socket from '../../socket';
 
 const LivePoll = ({ poll }) => {
   const [results, setResults] = useState({});

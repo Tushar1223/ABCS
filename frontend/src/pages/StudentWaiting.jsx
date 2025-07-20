@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
 import FloatingChat from '../components/student/FloatingChat';
-
-const socket = io('http://localhost:5000'); // replace with deployed URL if needed
+import socket from '../../src/socket';
 
 const StudentWaiting = ({ setPoll }) => {
   const navigate = useNavigate();

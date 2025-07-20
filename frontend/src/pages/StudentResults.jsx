@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
 import {
   BarChart,
   Bar,
@@ -11,8 +10,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import FloatingChat from '../components/student/FloatingChat';
-
-const socket = io('http://localhost:5000');
+import socket from '../../src/socket';
 
 const StudentResults = ({ poll }) => {
   const navigate = useNavigate();
@@ -32,6 +30,17 @@ const StudentResults = ({ poll }) => {
       socket.off('poll-results');
     };
   }, [poll, navigate]);
+
+  useEffect(() => {
+    const handleKicked = () => {
+      navigate('/kicked');
+    };
+
+    socket.on('kicked', handleKicked);
+    return () => {
+      socket.off('kicked', handleKicked);
+    };
+  }, [navigate]);
 
   const chartData = poll.options.map((opt) => ({
     option: opt,
@@ -55,7 +64,6 @@ const StudentResults = ({ poll }) => {
         </ResponsiveContainer>
       </div>
 
-      {/* Floating Chat Button */}
       <FloatingChat
         pollId={poll._id}
         sender={sessionStorage.getItem('studentName')}

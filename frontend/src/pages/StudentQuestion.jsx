@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
 import FloatingChat from '../components/student/FloatingChat';
-
-const socket = io('http://localhost:5000');
+import socket from '../../src/socket';
 
 const StudentQuestion = ({ poll }) => {
   const navigate = useNavigate();
@@ -28,6 +26,17 @@ const StudentQuestion = ({ poll }) => {
 
     return () => clearInterval(countdown);
   }, [poll, navigate]);
+
+  useEffect(() => {
+    const handleKicked = () => {
+      navigate('/kicked');
+    };
+
+    socket.on('kicked', handleKicked);
+    return () => {
+      socket.off('kicked', handleKicked);
+    };
+  }, [navigate]);
 
   const handleSubmit = () => {
     const studentName = sessionStorage.getItem('studentName');
@@ -68,7 +77,6 @@ const StudentQuestion = ({ poll }) => {
         Submit Answer
       </button>
 
-      {/* Floating Chat Button */}
       <FloatingChat
         pollId={poll._id}
         sender={sessionStorage.getItem('studentName')}
