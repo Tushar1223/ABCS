@@ -2,11 +2,17 @@ import http from 'http';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
-
+import cors from 'cors';
 import app from './app.js';
 import socketHandler from './socket/socketHandler.js';
 
 dotenv.config();
+
+app.use(cors({
+  origin: '*', // ✅ temporary during development
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 const server = http.createServer(app);
 const io = new Server(server, {
