@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import CreatePollModal from "../components/teacher/CreatePollModal";
 import LivePoll from "../components/teacher/LivePoll";
-import ChatTab from "../components/teacher/ChatTab";
-import ParticipantsTab from "../components/teacher/ParticipantsTab";
+// import ChatTab from "../components/teacher/ChatTab";
+// import ParticipantsTab from "../components/teacher/ParticipantsTab";
 import PollHistory from '../components/teacher/PollHistory';
+import FloatingChat from '../components/teacher/FloatingChat';
 import io from "socket.io-client";
 
 const socket = io("http://localhost:5000");
@@ -56,7 +57,7 @@ const TeacherDashboard = () => {
       )}
 
       <div className="flex gap-6 border-b border-gray-200 text-darkText text-sm mb-6">
-        {["live", "chat", "participants", "history"].map((tab) => (
+        {["live", "history"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -79,7 +80,7 @@ const TeacherDashboard = () => {
           </p>
         )}
 
-       {activeTab === "chat" && poll && <ChatTab pollId={poll._id} sender="teacher" />}
+       {/* {activeTab === "chat" && poll && <ChatTab pollId={poll._id} sender="teacher" />} */}
 
         {activeTab === "chat" && !poll && (
           <p className="text-grayText text-sm text-center">
@@ -87,9 +88,10 @@ const TeacherDashboard = () => {
           </p>
         )}
 
-        {activeTab === "participants" && <ParticipantsTab />}
+        {/* {activeTab === "participants" && <ParticipantsTab />} */}
         {activeTab === "history" && <PollHistory />}
       </div>
+      {poll && <FloatingChat pollId={poll._id} sender="teacher" />}
     </div>
   );
 };
