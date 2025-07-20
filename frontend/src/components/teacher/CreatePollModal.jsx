@@ -22,7 +22,7 @@ const CreatePollModal = ({ onClose, onCreate }) => {
   const handleSubmit = async () => {
   setLoading(true);
   try {
-    const response = await axios.post('http://localhost:5000/api/polls', {
+    const response = await axios.post('https://live-polling-system-59mk.onrender.com/api/polls', {
       question,
       options: options.filter(opt => opt.trim() !== ''),
       duration

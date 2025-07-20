@@ -13,7 +13,7 @@ const FloatingChat = ({ pollId, sender = 'teacher' }) => {
   useEffect(() => {
     if (!pollId) return;
 
-    fetch(`http://localhost:5000/api/messages/${pollId}`)
+    fetch(`https://live-polling-system-59mk.onrender.com/api/messages/${pollId}`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setMessages(data);
